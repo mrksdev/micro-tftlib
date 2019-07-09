@@ -1,5 +1,5 @@
-#include "Arduino.h"
-#include "Test.h"
+#include <Arduino.h>
+#include "MicroTftLib.h"
 #include <Adafruit_ST7735.h>
 
 int WIDTH;
@@ -23,20 +23,20 @@ float maxT = 0;
 float minH = 100;
 float maxH = 0;
 
-Test::Test(Adafruit_ST7735 &tft)
+MicroTftLib::MicroTftLib(Adafruit_ST7735 &tft)
 {
     this->tft = &tft;
     HEIGHT = tft.height(); // Adafruit library handles display in vertical mode, so we have to chnage height/width here.
     WIDTH = tft.width();
 }
 
-void Test::begin()
+void MicroTftLib::begin()
 {
     tft->initR(INITR_BLACKTAB);
     tft->setRotation(1);
 }
 
-void Test::printTemperature(float value)
+void MicroTftLib::printTemperature(float value)
 {
     const float factor = HEIGHT / 50;
 
@@ -65,7 +65,7 @@ void Test::printTemperature(float value)
     {
         tft->setTextColor(ST77XX_BLUE);
     }
-    
+
     // print the sensor value
     tft->setCursor(0, 30);
     tft->print(sensorTempPrintout);
@@ -81,7 +81,7 @@ void Test::printTemperature(float value)
     tft->print(DEGREE);
 }
 
-void Test::printHumidity(float value)
+void MicroTftLib::printHumidity(float value)
 {
     const float factor = HEIGHT / 100;
 
@@ -121,13 +121,13 @@ void Test::printHumidity(float value)
     tft->print(PERCENT);
 }
 
-void Test::drawProgressBarBoarder()
+void MicroTftLib::drawProgressBarBoarder()
 {
     tft->setTextColor(ST77XX_WHITE);
     tft->drawRect(WIDTH - 10, HEIGHT - 123, 8, 118, ST77XX_WHITE);
 }
 
-void Test::drawScale()
+void MicroTftLib::drawScale()
 {
     tft->setTextSize(1);
     tft->setCursor(5, 20);
@@ -151,7 +151,7 @@ void Test::drawScale()
     tft->drawFastHLine(97, 119, 8, ST77XX_WHITE);
 }
 
-void Test::drawValueBar(float value, float factor)
+void MicroTftLib::drawValueBar(float value, float factor)
 {
 
     for (int i = HEIGHT - (value * factor); i < HEIGHT - 8; i = i + 8)
@@ -163,7 +163,7 @@ void Test::drawValueBar(float value, float factor)
     }
 }
 
-void Test::drawMinMax(float min, float max)
+void MicroTftLib::drawMinMax(float min, float max)
 {
     String minimum = String(min);
     String maximum = String(max);
@@ -183,7 +183,7 @@ void Test::drawMinMax(float min, float max)
     tft->print(maxValue);
 }
 
-void Test::setMinMaxValues(float temp, float hum)
+void MicroTftLib::setMinMaxValues(float temp, float hum)
 {
     if (temp < minT)
     {
@@ -203,24 +203,24 @@ void Test::setMinMaxValues(float temp, float hum)
     }
 }
 
-void Test::drawTempBar(int nPer)
+void MicroTftLib::drawTempBar(int nPer)
 {
     tft->fillRect(40, 20 + (100 - nPer), 20, nPer, ST77XX_GREEN);
 }
 
-void Test::drawHumBar(int nPer)
+void MicroTftLib::drawHumBar(int nPer)
 {
     tft->fillRect(110, 20 + (100 - nPer), 20, nPer, ST77XX_GREEN);
 }
 
-void Test::clearScreen()
+void MicroTftLib::clearScreen()
 {
     tft->fillScreen(ST77XX_BLACK);
 }
 
-bool Test::checkError(float h, float t, bool isError)
+bool MicroTftLib::checkError(float h, float t, bool isError)
 {
-     // Check if any reads failed and exit early (to try again)->
+    // Check if any reads failed and exit early (to try again)->
     if (isnan(h) || isnan(t))
     {
         if (!isError)
@@ -234,4 +234,3 @@ bool Test::checkError(float h, float t, bool isError)
         return false;
     }
 }
-
