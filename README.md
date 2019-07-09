@@ -3,6 +3,11 @@ A small C++ library for using with microcontrollers like Arduino or ESPxx to vie
 
 #### Documentation
 
+Constructor needs an Adafruit_ST7735 instance
+```cpp
+MicroTftLib(Adafruit_ST7735) 
+```
+
 ```cpp 
 printStateBar(float value, int maxValue)
 ```
